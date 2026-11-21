@@ -3,90 +3,403 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Proyecto de secretaria con inteligencia artificial para gestionar citas por WhatsApp.">
-  <title>Sarchi AI | Secretaria virtual</title>
+  <meta name="theme-color" content="#163e35">
+  <meta name="description" content="Estamos desarrollando una secretaria virtual con inteligencia artificial para ayudar a profesionales y pequeños negocios a gestionar sus citas por WhatsApp.">
+  <title>Secretaria Virtual · Tu agenda empieza con una conversación</title>
+
   <style>
+    :root {
+      --background: #f7f8f2;
+      --surface: #ffffff;
+      --green: #163e35;
+      --muted: #62716b;
+      --accent: #c6ed94;
+      --border: #dfe6dd;
+    }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: system-ui, sans-serif;
-      background: #f5f7fa;
-      color: #182334;
-      line-height: 1.7;
+      background: var(--background);
+      color: var(--green);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
     }
-    main { max-width: 880px; margin: auto; padding: 64px 24px; }
-    .brand { font-weight: 800; font-size: 22px; }
-    .badge {
+
+    .container {
+      width: min(1080px, calc(100% - 48px));
+      margin: auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 750;
+      letter-spacing: -.5px;
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--green);
+      color: var(--accent);
+    }
+
+    .brand-icon svg { width: 22px; height: 22px; }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 650;
+      color: var(--muted);
+    }
+
+    .status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      background: #6b9653;
+      border-radius: 50%;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      align-items: center;
+      gap: 64px;
+      padding: 88px 0 72px;
+    }
+
+    .eyebrow {
+      margin: 0 0 20px;
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 650px;
+      font-size: clamp(40px, 5.5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: -2.5px;
+      font-weight: 750;
+    }
+
+    h1 span { color: #688c48; }
+
+    .lead {
+      max-width: 510px;
+      margin: 26px 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .pill {
       display: inline-block;
-      margin-top: 40px;
-      padding: 5px 14px;
+      padding: 9px 15px;
+      border: 1px solid var(--border);
       border-radius: 30px;
-      background: #dceee6;
-      color: #205c43;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .conversation {
+      padding: 26px;
+      background: var(--green);
+      border-radius: 26px;
+      box-shadow: 0 24px 55px #163e3514;
+    }
+
+    .conversation-title {
+      margin: 0 0 24px;
+      color: #e3eedf;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .message {
+      max-width: 92%;
+      margin: 12px 0;
+      padding: 14px 17px;
+      border-radius: 16px 16px 16px 4px;
+      background: #fff;
+      color: var(--green);
       font-size: 14px;
     }
-    h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1.15; }
-    .intro { font-size: 20px; color: #4c596b; }
-    section {
-      background: white;
-      border: 1px solid #e3e8ef;
-      border-radius: 18px;
-      padding: 24px;
+
+    .message.customer {
+      margin-left: auto;
+      background: var(--accent);
+      border-radius: 16px 16px 4px 16px;
+    }
+
+    .demo-note {
+      margin: 22px 0 0;
+      color: #c0d1c9;
+      font-size: 12px;
+    }
+
+    .section-heading {
+      margin: 0 0 24px;
+      font-size: clamp(24px, 3vw, 32px);
+      line-height: 1.2;
+      letter-spacing: -.8px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--surface);
+    }
+
+    .number {
+      display: inline-block;
+      margin-bottom: 22px;
+      color: #65844e;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 19px;
+      letter-spacing: -.4px;
+    }
+
+    .card p, .audience p, .development p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .audience { padding: 64px 0; }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
       margin-top: 24px;
     }
-    h2 { margin-top: 0; font-size: 22px; }
-    a { color: #205c43; }
-    footer { margin-top: 36px; color: #596577; font-size: 14px; }
+
+    .tag {
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: #eaf0e3;
+      font-size: 13px;
+    }
+
+    .development {
+      padding: 30px;
+      border: 1px solid var(--border);
+      border-left: 4px solid #83a85d;
+      border-radius: 16px;
+      background: #eef2e8;
+    }
+
+    .development h2 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+
+    .development p + p { margin-top: 12px; }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 64px;
+      padding: 26px 0;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    footer p { margin: 0; }
+
+    @media (max-width: 800px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 56px 0;
+      }
+
+      .features { grid-template-columns: 1fr; }
+      .card { padding: 24px; }
+      .number { margin-bottom: 12px; }
+      .conversation { max-width: 500px; }
+      footer { flex-direction: column; gap: 8px; }
+    }
+
+    @media (max-width: 450px) {
+      .container { width: calc(100% - 36px); }
+      header { align-items: flex-start; flex-direction: column; gap: 12px; }
+      h1 { letter-spacing: -1.5px; }
+      .conversation { padding: 20px; }
+      .development { padding: 24px; }
+    }
   </style>
 </head>
+
 <body>
-  <main>
-    <div class="brand">Sarchi AI</div>
-    <span class="badge">Proyecto en desarrollo</span>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <span class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-4 3V11.5A7.5 7.5 0 0 1 9.5 4h3A7.5 7.5 0 0 1 20 11.5Z"/>
+            <path d="m8 11 2.5 2.5L15 9"/>
+          </svg>
+        </span>
+        Secretaria Virtual
+      </div>
+      <span class="status">En desarrollo</span>
+    </header>
 
-    <h1>Una secretaria virtual para gestionar citas por WhatsApp.</h1>
-    <p class="intro">
-      Estamos desarrollando una herramienta con inteligencia artificial
-      para que profesionales y pequeños negocios puedan atender consultas
-      y organizar sus citas mediante conversaciones naturales.
-    </p>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Menos pendientes. Más tiempo.</p>
+          <h1 id="hero-title">
+            Tu agenda empieza con una <span>conversación.</span>
+          </h1>
+          <p class="lead">
+            Estamos creando una secretaria con inteligencia artificial
+            para que profesionales y pequeños negocios puedan gestionar
+            sus citas hablando por WhatsApp.
+          </p>
+          <span class="pill">Pensada para el día a día de tu negocio</span>
+        </div>
 
-    <section>
-      <h2>Qué estamos construyendo</h2>
-      <p>
-        Nuestro objetivo es permitir que los clientes consulten servicios,
-        encuentren disponibilidad, reserven, cambien o cancelen una cita
-        escribiendo por WhatsApp.
-      </p>
-      <p>
-        El profesional podrá configurar sus servicios, precios y horarios,
-        gestionar su agenda y retomar la atención cuando sea necesario.
-      </p>
-    </section>
+        <div class="conversation" aria-label="Ejemplo ilustrativo de conversación">
+          <p class="conversation-title">Así imaginamos la experiencia</p>
 
-    <section>
-      <h2>Para profesionales independientes y equipos</h2>
-      <p>
-        Pensado para barberías, salones de belleza, estudios de tatuajes
-        y otros negocios que trabajan con citas. El proyecto contempla
-        agendas por profesional y conexiones de WhatsApp por negocio.
-      </p>
-    </section>
+          <div class="message customer">
+            Hola, ¿tienes espacio para un corte el sábado después de las 3?
+          </div>
 
-    <section>
-      <h2>Estado del proyecto</h2>
-      <p>
-        Actualmente estamos preparando el prototipo y evaluando la
-        integración con WhatsApp Business Platform, incluida la
-        coexistencia con WhatsApp Business para las cuentas elegibles.
-        El servicio todavía no está disponible comercialmente.
-      </p>
-    </section>
+          <div class="message">
+            ¡Hola! Hay disponibilidad a las 3:30 y a las 5:00.
+            ¿Cuál te queda mejor?
+          </div>
 
+          <div class="message customer">
+            A las 5, porfa.
+          </div>
+
+          <div class="message">
+            Claro. ¿A nombre de quién reservamos?
+          </div>
+
+          <p class="demo-note">
+            Ejemplo ilustrativo del producto previsto.
+            No es una conversación con un servicio activo.
+          </p>
+        </div>
+      </section>
+
+      <section aria-labelledby="features-title">
+        <p class="eyebrow">Lo que estamos construyendo</p>
+        <h2 id="features-title" class="section-heading">
+          Una ayuda para atender y organizar.
+        </h2>
+
+        <div class="features">
+          <article class="card">
+            <span class="number">01 / Atención</span>
+            <h3>Conversaciones naturales</h3>
+            <p>
+              Consultar servicios, precios y horarios mediante mensajes,
+              con una experiencia sencilla y cercana.
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="number">02 / Agenda</span>
+            <h3>Citas organizadas</h3>
+            <p>
+              Buscar disponibilidad, reservar, reprogramar y cancelar
+              citas, respetando los horarios de cada profesional.
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="number">03 / Tu negocio</span>
+            <h3>El profesional al mando</h3>
+            <p>
+              Configurar servicios y horarios por chat, gestionar la
+              agenda y retomar la atención cuando sea necesario.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="audience" aria-labelledby="audience-title">
+        <h2 id="audience-title" class="section-heading">
+          Para quienes trabajan con citas.
+        </h2>
+        <p>
+          Desde profesionales independientes hasta negocios con varios
+          integrantes. Queremos adaptarnos a la forma en que cada uno
+          atiende a sus clientes.
+        </p>
+
+        <div class="tags">
+          <span class="tag">Barberías</span>
+          <span class="tag">Salones de belleza</span>
+          <span class="tag">Estudios de tatuajes</span>
+          <span class="tag">Profesionales independientes</span>
+        </div>
+      </section>
+
+      <section class="development" aria-labelledby="development-title">
+        <h2 id="development-title">Estamos preparando las primeras pruebas</h2>
+        <p>
+          Secretaria Virtual es un proyecto en desarrollo.
+          Actualmente estamos evaluando la integración con WhatsApp
+          Business Platform y la coexistencia con WhatsApp Business
+          para cuentas elegibles.
+        </p>
+        <p>
+          Las funciones descritas corresponden al producto que estamos
+          construyendo. El servicio todavía no está disponible
+          comercialmente.
+        </p>
+      </section>
+    </main>
 
     <footer>
-      Sarchi AI · Proyecto independiente, sin afiliación con Meta o WhatsApp.
+      <p>Secretaria Virtual · Proyecto en desarrollo</p>
+      <p>Proyecto independiente, sin afiliación con Meta o WhatsApp.</p>
     </footer>
-  </main>
+  </div>
 </body>
 </html>
